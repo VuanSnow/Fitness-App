@@ -170,7 +170,10 @@ class CustomerTable extends Component {
                           icon='edit'
                           shape='circle'
                           size='small'
-                          onClick={() => console.log(customer)}
+                          onClick={() => {
+                            this.setState({ currentCustomer: customer });
+                            this.showDrawer();
+                          }}
                         />
                       </Tooltip>,
                       <Tooltip title='Trainings'>
@@ -221,6 +224,7 @@ class CustomerTable extends Component {
                 </Col>
               ))}
             </Row>
+            {this.showCustomer()}
           </div>
         );
       }
