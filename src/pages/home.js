@@ -1,35 +1,56 @@
-import React, { Component } from 'react';
-import axios from 'axios';
-import { withStyles } from '@material-ui/core/styles';
-import Table from '@material-ui/core/Table';
-import TableBody from '@material-ui/core/TableBody';
-import TableCell from '@material-ui/core/TableCell';
-import TableHead from '@material-ui/core/TableHead';
-import TableRow from '@material-ui/core/TableRow';
-import Paper from '@material-ui/core/Paper';
-import { NavLink } from 'react-router-dom';
-import Navbar from '../components/Navbar';
-import CustomerTable from '../components/CustomerTable';
+import React, { Component } from "react";
+import Navbar from "../components/Navbar";
+import CustomerTable from "../components/CustomerTable";
+import { connect } from "react-redux";
+import * as actionCreators from "../store/actions";
+import "react-big-calendar/lib/css/react-big-calendar.css";
+import { Skeleton } from "antd";
 
-export default class Home extends Component {
+class Home extends Component {
   state = {
-    customers: []
+    loading: null
   };
 
   componentDidMount() {
-    axios.get(`https://customerrest.herokuapp.com/api/customers`).then(res => {
-      const customers = res.data.content;
-      this.setState({ customers });
-    });
+    const { fetchCustomers } = this.props;
+    this.setState({ loading: true });
+    fetchCustomers();
+    this.setState({ loading: false });
   }
 
+  renderContent() {
+    switch (this.state.loading) {
+      case false:
+        return (
+          <div className='box-container'>
+            <CustomerTable data={this.props.customers} />
+          </div>
+        );
+      default:
+        return (
+          <div>
+            <Skeleton active />
+          </div>
+        );
+    }
+  }
   render() {
     return (
-      <div>
+      <div className='container'>
         <Navbar />
-        <h1>home</h1>
-        <CustomerTable data={this.state.customers} />
+        {this.renderContent()}
       </div>
     );
   }
 }
+
+const mapStateToProps = state => {
+  return {
+    customers: state.customers
+  };
+};
+
+export default connect(
+  mapStateToProps,
+  actionCreators
+)(Home);

@@ -1,8 +1,78 @@
+/* CUSTOM FONT IMPORTS */
+@import url("https://fonts.googleapis.com/css?family=Fredoka+One|Open+Sans");
+
+.font-fredokaone {
+  font-family: "Fredoka One", cursive;
+}
+.font-opensans {
+  font-family: "Open Sans", sans-serif;
+}
+
+body {
+  background: url("../bg.jpg") no-repeat fixed center;
+  background-size: cover;
+  font-family: "Fredoka One", cursive;
+  user-select: none;
+  -moz-user-select: none;
+  -khtml-user-select: none;
+  -webkit-user-select: none;
+  -o-user-select: none;
+}
+
+/* Navbar link color */
 .router-link {
   color: black;
+  font-size: 25px;
   text-decoration: none;
   margin: 0.5em;
 }
+
+/* Navbar link active color */
 .active-link {
-  color: #ef5350;
+  color: #1890ff;
+}
+
+/* Align navbar icon on the same level as the text */
+.nav-icon {
+  display: inline-flex;
+  vertical-align: bottom;
+}
+
+#calendar {
+  margin-top: 1em;
+  height: 750px;
+  font-family: "Open Sans", sans-serif;
+  -webkit-box-shadow: 3px 20px 30px 0px rgba(0, 0, 0, 0.75);
+  -moz-box-shadow: 3px 20px 30px 0px rgba(0, 0, 0, 0.75);
+  box-shadow: 3px 20px 30px 0px rgba(0, 0, 0, 0.75);
+}
+
+.container {
+  padding: 2em;
+}
+
+.ant-card-bordered {
+  -webkit-box-shadow: 3px 20px 30px 0px rgba(0, 0, 0, 0.75);
+  -moz-box-shadow: 3px 20px 30px 0px rgba(0, 0, 0, 0.75);
+  box-shadow: 3px 20px 30px 0px rgba(0, 0, 0, 0.75);
+}
+
+.ant-input {
+  -webkit-box-shadow: 3px 20px 30px 0px rgba(0, 0, 0, 0.75);
+  -moz-box-shadow: 3px 20px 30px 0px rgba(0, 0, 0, 0.75);
+  box-shadow: 3px 20px 30px 0px rgba(0, 0, 0, 0.75);
+}
+
+@media (max-width: 1000px) {
+  .ant-card {
+    margin-bottom: 15px !important;
+  }
+  .ant-row {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+  }
+  .ant-col-8 {
+    width: 80% !important;
+  }
 }
