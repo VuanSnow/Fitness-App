@@ -1,17 +1,17 @@
 /* CUSTOM FONT IMPORTS */
-@import url("https://fonts.googleapis.com/css?family=Fredoka+One|Open+Sans");
+@import url('https://fonts.googleapis.com/css?family=Fredoka+One|Open+Sans');
 
 .font-fredokaone {
-  font-family: "Fredoka One", cursive;
+  font-family: 'Fredoka One', cursive;
 }
 .font-opensans {
-  font-family: "Open Sans", sans-serif;
+  font-family: 'Open Sans', sans-serif;
 }
 
 body {
-  background: url("../bg.jpg") no-repeat fixed center;
+  background: url('../bg.jpg') no-repeat fixed center;
   background-size: cover;
-  font-family: "Fredoka One", cursive;
+  font-family: 'Fredoka One', cursive;
   user-select: none;
   -moz-user-select: none;
   -khtml-user-select: none;
@@ -41,7 +41,7 @@ body {
 #calendar {
   margin-top: 1em;
   height: 750px;
-  font-family: "Open Sans", sans-serif;
+  font-family: 'Open Sans', sans-serif;
   -webkit-box-shadow: 3px 20px 30px 0px rgba(0, 0, 0, 0.75);
   -moz-box-shadow: 3px 20px 30px 0px rgba(0, 0, 0, 0.75);
   box-shadow: 3px 20px 30px 0px rgba(0, 0, 0, 0.75);
@@ -57,7 +57,7 @@ body {
   box-shadow: 3px 20px 30px 0px rgba(0, 0, 0, 0.75);
 }
 
-.ant-input {
+.ant-input-search > .ant-input-wrapper > .ant-input {
   -webkit-box-shadow: 3px 20px 30px 0px rgba(0, 0, 0, 0.75);
   -moz-box-shadow: 3px 20px 30px 0px rgba(0, 0, 0, 0.75);
   box-shadow: 3px 20px 30px 0px rgba(0, 0, 0, 0.75);

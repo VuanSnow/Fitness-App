@@ -1,12 +1,12 @@
-import axios from "axios";
+import axios from 'axios';
 
 export const addCustomers = customers => ({
-  type: "ADD_CUSTOMERS",
+  type: 'ADD_CUSTOMERS',
   customers
 });
 
 export const removeCustomer = id => ({
-  type: "REMOVE_CUSTOMER",
+  type: 'REMOVE_CUSTOMER',
   id
 });
 
@@ -25,7 +25,7 @@ export function fetchCustomers() {
         arr = [...result.data.content];
         arr.forEach(e => {
           //Get customer id from link
-          const lastSlashIndex = e.links[0].href.lastIndexOf("/");
+          const lastSlashIndex = e.links[0].href.lastIndexOf('/');
           e.id = Number(e.links[0].href.substring(lastSlashIndex + 1));
           axios
             .get(`${e.links[2].href}`)
