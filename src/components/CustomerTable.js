@@ -1,6 +1,7 @@
-import React, { Component } from 'react';
-import * as actionCreators from '../store/actions';
-import { connect } from 'react-redux';
+import React, { Component } from "react";
+import * as actionCreators from "../store/actions";
+import { connect } from "react-redux";
+import moment from "moment";
 
 import {
   Card,
@@ -17,16 +18,16 @@ import {
   Divider,
   Skeleton,
   Form
-} from 'antd';
-import 'antd/dist/antd.css';
+} from "antd";
+import "antd/dist/antd.css";
 
 const { Meta } = Card;
 
 const pStyle = {
   fontSize: 16,
-  color: 'rgba(0,0,0,0.85)',
-  lineHeight: '24px',
-  display: 'block',
+  color: "rgba(0,0,0,0.85)",
+  lineHeight: "24px",
+  display: "block",
   marginBottom: 16
 };
 
@@ -34,16 +35,16 @@ const DescriptionItem = ({ title, content }) => (
   <div
     style={{
       fontSize: 14,
-      lineHeight: '22px',
+      lineHeight: "22px",
       marginBottom: 7,
-      color: 'rgba(0,0,0,0.65)'
+      color: "rgba(0,0,0,0.65)"
     }}
   >
     <p
       style={{
         marginRight: 8,
-        display: 'inline-block',
-        color: 'rgba(0,0,0,0.85)'
+        display: "inline-block",
+        color: "rgba(0,0,0,0.85)"
       }}
     >
       {title}:
@@ -59,9 +60,10 @@ class CustomerTable extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      search: '',
+      search: "",
       customerDrawerVisible: false,
       createCustomerDrawerVisible: false,
+      trainingDrawerVisible: false,
       currentCustomer: {}
     };
     this.customerDrawer = this.customerDrawer.bind(this);
@@ -69,6 +71,7 @@ class CustomerTable extends Component {
     this.filterData = this.filterData.bind(this);
     this.cancel = this.cancel.bind(this);
     this.createCustomerDrawer = this.createCustomerDrawer.bind(this);
+    this.trainingDrawer = this.trainingDrawer.bind(this);
   }
 
   showCustomerDrawer = () => {
@@ -87,61 +90,99 @@ class CustomerTable extends Component {
     this.setState({ createCustomerDrawerVisible: false });
   };
 
+  showTrainingDrawer = () => {
+    this.setState({ trainingDrawerVisible: true });
+  };
+
+  onCloseTrainingDrawer = () => {
+    this.setState({ trainingDrawerVisible: false });
+  };
+
+  trainingDrawer = () => {
+    const customer = this.state.currentCustomer;
+    if (customer.trainings !== undefined) {
+      const hasTrainings = customer.trainings.map((e, i) => (
+        <Row key={i}>
+          <Divider />
+          <p style={pStyle}>Date: {moment(e.date).format("DD/MM/YYYY")}</p>
+          <p style={pStyle}>Activity: {e.activity}</p>
+          <p style={pStyle}>Duration: {e.duration} min(s)</p>
+        </Row>
+      ));
+
+      const noTrainings = (
+        <Row>
+          <Divider />
+          <p style={pStyle}>No trainings found!</p>
+        </Row>
+      );
+
+      return (
+        <Drawer
+          width={640}
+          placement='right'
+          closable={true}
+          onClose={this.onCloseTrainingDrawer}
+          visible={this.state.trainingDrawerVisible}
+        >
+          <p style={{ ...pStyle, marginBottom: 24 }}>{`${customer.firstname} ${
+            customer.lastname
+          }'s trainings`}</p>
+          <p style={pStyle}>Customer ID: {customer.id}</p>
+
+          <div>
+            {customer.trainings[0].rel !== null ? hasTrainings : noTrainings}
+          </div>
+        </Drawer>
+      );
+    } else {
+      return <p>This is broken!</p>;
+    }
+  };
+
   createCustomerDrawer = () => {
     return (
       <Drawer
         width={640}
-        placement="right"
+        placement='right'
         closable={true}
         onClose={this.onCloseCreateCustomerDrawer}
         visible={this.state.createCustomerDrawerVisible}
+        className='new-customer-drawer'
       >
-        <p style={{ ...pStyle, marginBottom: 24 }}>Customer Profile</p>
+        <p style={{ ...pStyle, marginBottom: 24 }}>New Customer Profile</p>
 
-        <Form>
+        <Form className='new-customer-form'>
           <Form.Item>
             <Row>
-              <Col span={12} style={{ paddingRight: '2em' }}>
+              <Col
+                span={12}
+                style={{ paddingRight: "2em" }}
+                className='new-customer-firstname'
+              >
                 <Input
                   prefix={
                     <Icon
-                      type="contacts"
-                      style={{ color: 'rgba(0,0,0,.25)' }}
-                      theme="twoTone"
-                      twoToneColor="#1890ff"
+                      type='contacts'
+                      style={{ color: "rgba(0,0,0,.25)" }}
+                      theme='twoTone'
+                      twoToneColor='#1890ff'
                     />
                   }
-                  placeholder="First Name..."
+                  placeholder='First Name...'
                 />
               </Col>
               <Col span={12}>
                 <Input
                   prefix={
                     <Icon
-                      type="contacts"
-                      style={{ color: 'rgba(0,0,0,.25)' }}
-                      theme="twoTone"
-                      twoToneColor="#1890ff"
+                      type='contacts'
+                      style={{ color: "rgba(0,0,0,.25)" }}
+                      theme='twoTone'
+                      twoToneColor='#1890ff'
                     />
                   }
-                  placeholder="Last Name..."
-                />
-              </Col>
-            </Row>
-          </Form.Item>
-          <Form.Item>
-            <Row gutter={8}>
-              <Col>
-                <Input
-                  prefix={
-                    <Icon
-                      type="mail"
-                      style={{ color: 'rgba(0,0,0,.25)' }}
-                      theme="twoTone"
-                      twoToneColor="#1890ff"
-                    />
-                  }
-                  placeholder="Email..."
+                  placeholder='Last Name...'
                 />
               </Col>
             </Row>
@@ -151,13 +192,13 @@ class CustomerTable extends Component {
               <Input
                 prefix={
                   <Icon
-                    type="mobile"
-                    style={{ color: 'rgba(0,0,0,.25)' }}
-                    theme="twoTone"
-                    twoToneColor="#1890ff"
+                    type='mail'
+                    style={{ color: "rgba(0,0,0,.25)" }}
+                    theme='twoTone'
+                    twoToneColor='#1890ff'
                   />
                 }
-                placeholder="Telephone..."
+                placeholder='E-Mail...'
               />
             </Row>
           </Form.Item>
@@ -166,48 +207,67 @@ class CustomerTable extends Component {
               <Input
                 prefix={
                   <Icon
-                    type="environment"
-                    style={{ color: 'rgba(0,0,0,.25)' }}
-                    theme="twoTone"
-                    twoToneColor="#1890ff"
+                    type='mobile'
+                    style={{ color: "rgba(0,0,0,.25)" }}
+                    theme='twoTone'
+                    twoToneColor='#1890ff'
                   />
                 }
-                placeholder="Street address.."
+                placeholder='Telephone...'
               />
             </Row>
           </Form.Item>
           <Form.Item>
             <Row>
-              <Col span={12} style={{ paddingRight: '2em' }}>
+              <Input
+                prefix={
+                  <Icon
+                    type='environment'
+                    style={{ color: "rgba(0,0,0,.25)" }}
+                    theme='twoTone'
+                    twoToneColor='#1890ff'
+                  />
+                }
+                placeholder='Street address..'
+              />
+            </Row>
+          </Form.Item>
+          <Form.Item>
+            <Row>
+              <Col
+                span={12}
+                style={{ paddingRight: "2em" }}
+                className='new-customer-city'
+              >
                 <Input
                   prefix={
                     <Icon
-                      type="home"
-                      style={{ color: 'rgba(0,0,0,.25)' }}
-                      theme="twoTone"
-                      twoToneColor="#1890ff"
+                      type='home'
+                      style={{ color: "rgba(0,0,0,.25)" }}
+                      theme='twoTone'
+                      twoToneColor='#1890ff'
                     />
                   }
-                  placeholder="City..."
+                  placeholder='City...'
                 />
               </Col>
               <Col span={12}>
                 <Input
                   prefix={
                     <Icon
-                      type="cloud"
-                      style={{ color: 'rgba(0,0,0,.25)' }}
-                      theme="twoTone"
-                      twoToneColor="#1890ff"
+                      type='cloud'
+                      style={{ color: "rgba(0,0,0,.25)" }}
+                      theme='twoTone'
+                      twoToneColor='#1890ff'
                     />
                   }
-                  placeholder="Postal Code..."
+                  placeholder='Postal Code...'
                 />
               </Col>
             </Row>
           </Form.Item>
           <Form.Item>
-            <Button type="primary" htmlType="submit" block>
+            <Button type='primary' htmlType='submit' block>
               Add
             </Button>
           </Form.Item>
@@ -221,7 +281,7 @@ class CustomerTable extends Component {
     return (
       <Drawer
         width={640}
-        placement="right"
+        placement='right'
         closable={true}
         onClose={this.onCloseCustomerDrawer}
         visible={this.state.customerDrawerVisible}
@@ -231,13 +291,13 @@ class CustomerTable extends Component {
         <Row>
           <Col span={12}>
             <DescriptionItem
-              title="Full Name"
-              content={customer.firstname + ' ' + customer.lastname}
+              title='Full Name'
+              content={customer.firstname + " " + customer.lastname}
             />
           </Col>
           <Col span={12}>
             <DescriptionItem
-              title="Address"
+              title='Address'
               content={`${customer.streetaddress}, ${customer.city}, ${
                 customer.postcode
               }`}
@@ -252,10 +312,10 @@ class CustomerTable extends Component {
         <p style={pStyle}>Contacts</p>
         <Row>
           <Col span={12}>
-            <DescriptionItem title="Email" content={customer.email} />
+            <DescriptionItem title='Email' content={customer.email} />
           </Col>
           <Col span={12}>
-            <DescriptionItem title="Phone Number" content={customer.phone} />
+            <DescriptionItem title='Phone Number' content={customer.phone} />
           </Col>
         </Row>
         <Row>
@@ -284,13 +344,13 @@ class CustomerTable extends Component {
       v =>
         v.firstname.toUpperCase().includes(keyword) ||
         v.lastname.toUpperCase().includes(keyword) ||
-        (v.firstname + ' ' + v.lastname).toUpperCase().includes(keyword)
+        (v.firstname + " " + v.lastname).toUpperCase().includes(keyword)
     );
     return data;
   };
 
   cancel = () => {
-    console.log('cancel');
+    console.log("cancel");
   };
 
   CustomerList = props => {
@@ -301,34 +361,42 @@ class CustomerTable extends Component {
           style={{ marginBottom: 30 }}
           bordered={true}
           actions={[
-            <Tooltip title="Edit">
+            <Tooltip title='Edit'>
               <Button
-                icon="edit"
-                shape="circle"
-                size="small"
+                icon='edit'
+                shape='circle'
+                size='small'
                 onClick={() => {
                   this.setState({ currentCustomer: customer });
                   this.showCustomerDrawer();
                 }}
               />
             </Tooltip>,
-            <Tooltip title="Trainings">
-              <Button icon="book" shape="circle" size="small" />
+            <Tooltip title='Trainings'>
+              <Button
+                icon='book'
+                shape='circle'
+                size='small'
+                onClick={() => {
+                  this.setState({ currentCustomer: customer });
+                  this.showTrainingDrawer();
+                }}
+              />
             </Tooltip>,
-            <Tooltip title="Delete">
+            <Tooltip title='Delete'>
               <Popconfirm
-                title="Are you sure you want to delete this customer?"
+                title='Are you sure you want to delete this customer?'
                 onConfirm={() =>
                   this.confirm(
                     customer.id,
-                    customer.firstname + ' ' + customer.lastname
+                    customer.firstname + " " + customer.lastname
                   )
                 }
                 onCancel={this.cancel}
-                okText="Yes"
-                cancelText="No"
+                okText='Yes'
+                cancelText='No'
               >
-                <Button icon="delete" shape="circle" size="small" />
+                <Button icon='delete' shape='circle' size='small' />
               </Popconfirm>
             </Tooltip>
           ]}
@@ -336,24 +404,24 @@ class CustomerTable extends Component {
           <Meta
             title={`${customer.firstname} ${customer.lastname}`}
             avatar={
-              <Avatar src="https://cdn3.iconfinder.com/data/icons/avatars-9/145/Avatar_Panda-512.png" />
+              <Avatar src='https://cdn3.iconfinder.com/data/icons/avatars-9/145/Avatar_Panda-512.png' />
             }
           />
           <p />
           <p>
-            <Icon type="profile" theme="twoTone" />
+            <Icon type='profile' theme='twoTone' />
           </p>
           <p>
-            <Icon type="phone" theme="twoTone" /> {customer.phone}
+            <Icon type='phone' theme='twoTone' /> {customer.phone}
           </p>
           <p>
-            <Icon type="home" theme="twoTone" />
+            <Icon type='home' theme='twoTone' />
             {` ${customer.streetaddress}, ${customer.city}, ${
               customer.postcode
             }`}
           </p>
           <p>
-            <Icon type="mail" theme="twoTone" />
+            <Icon type='mail' theme='twoTone' />
             {` ${customer.email}`}
           </p>
         </Card>
@@ -361,7 +429,10 @@ class CustomerTable extends Component {
     ));
     return (
       <Row gutter={16}>
-        {listItems} {this.customerDrawer()} {this.createCustomerDrawer()}
+        {listItems}
+        <this.customerDrawer />
+        <this.createCustomerDrawer />
+        <this.trainingDrawer />
       </Row>
     );
   };
@@ -380,12 +451,12 @@ class CustomerTable extends Component {
     const { Search } = Input;
 
     const addCustomerButton = (
-      <Tooltip title="Add new customer">
+      <Tooltip title='Add new customer'>
         <Button
-          icon="user-add"
-          size="small"
-          type="primary"
-          shape="round"
+          icon='user-add'
+          size='small'
+          type='primary'
+          shape='round'
           onClick={() => this.showCreateCustomerDrawer()}
           ghost
         />
@@ -395,8 +466,8 @@ class CustomerTable extends Component {
     return (
       <div>
         <Search
-          style={{ width: '100%', marginBottom: '2em', marginTop: '1em' }}
-          placeholder="Name..."
+          style={{ width: "100%", marginBottom: "2em", marginTop: "1em" }}
+          placeholder='Name...'
           onChange={this.search}
           enterButton
           addonBefore={addCustomerButton}
