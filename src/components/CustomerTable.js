@@ -102,27 +102,114 @@ class CustomerTable extends Component {
           <Form.Item>
             <Row>
               <Col span={12} style={{ paddingRight: '2em' }}>
-                <Input placeholder="First Name..." />
+                <Input
+                  prefix={
+                    <Icon
+                      type="contacts"
+                      style={{ color: 'rgba(0,0,0,.25)' }}
+                      theme="twoTone"
+                      twoToneColor="#1890ff"
+                    />
+                  }
+                  placeholder="First Name..."
+                />
               </Col>
               <Col span={12}>
-                <Input placeholder="Last Name..." />
+                <Input
+                  prefix={
+                    <Icon
+                      type="contacts"
+                      style={{ color: 'rgba(0,0,0,.25)' }}
+                      theme="twoTone"
+                      twoToneColor="#1890ff"
+                    />
+                  }
+                  placeholder="Last Name..."
+                />
+              </Col>
+            </Row>
+          </Form.Item>
+          <Form.Item>
+            <Row gutter={8}>
+              <Col>
+                <Input
+                  prefix={
+                    <Icon
+                      type="mail"
+                      style={{ color: 'rgba(0,0,0,.25)' }}
+                      theme="twoTone"
+                      twoToneColor="#1890ff"
+                    />
+                  }
+                  placeholder="Email..."
+                />
               </Col>
             </Row>
           </Form.Item>
           <Form.Item>
             <Row>
-              <Input placeholder="Street address.." />
+              <Input
+                prefix={
+                  <Icon
+                    type="mobile"
+                    style={{ color: 'rgba(0,0,0,.25)' }}
+                    theme="twoTone"
+                    twoToneColor="#1890ff"
+                  />
+                }
+                placeholder="Telephone..."
+              />
+            </Row>
+          </Form.Item>
+          <Form.Item>
+            <Row>
+              <Input
+                prefix={
+                  <Icon
+                    type="environment"
+                    style={{ color: 'rgba(0,0,0,.25)' }}
+                    theme="twoTone"
+                    twoToneColor="#1890ff"
+                  />
+                }
+                placeholder="Street address.."
+              />
             </Row>
           </Form.Item>
           <Form.Item>
             <Row>
               <Col span={12} style={{ paddingRight: '2em' }}>
-                <Input placeholder="City..." />
+                <Input
+                  prefix={
+                    <Icon
+                      type="home"
+                      style={{ color: 'rgba(0,0,0,.25)' }}
+                      theme="twoTone"
+                      twoToneColor="#1890ff"
+                    />
+                  }
+                  placeholder="City..."
+                />
               </Col>
               <Col span={12}>
-                <Input placeholder="Postal Code..." />
+                <Input
+                  prefix={
+                    <Icon
+                      type="cloud"
+                      style={{ color: 'rgba(0,0,0,.25)' }}
+                      theme="twoTone"
+                      twoToneColor="#1890ff"
+                    />
+                  }
+                  placeholder="Postal Code..."
+                />
               </Col>
             </Row>
+          </Form.Item>
+          <Form.Item>
+            <Button type="primary" htmlType="submit" block>
+              Add
+            </Button>
           </Form.Item>
         </Form>
       </Drawer>
