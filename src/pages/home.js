@@ -12,9 +12,6 @@ class Home extends Component {
   };
 
   componentDidMount() {
-    const { fetchCustomers } = this.props;
-    this.setState({ loading: true });
-    fetchCustomers();
     this.setState({ loading: false });
   }
 
