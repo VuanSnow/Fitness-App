@@ -93,4 +93,10 @@ body {
   .ant-drawer-content-wrapper {
     width: 100% !important;
   }
+  .ant-col {
+    width: 100%;
+  }
+  .ant-input-number {
+    width: 100% !important;
+  }
 }

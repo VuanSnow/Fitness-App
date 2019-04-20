@@ -1,10 +1,10 @@
-import React, { Component } from 'react';
-import Navbar from '../components/Navbar';
-import CustomerTable from '../components/CustomerTable';
-import { connect } from 'react-redux';
-import * as actionCreators from '../store/actions';
-import 'react-big-calendar/lib/css/react-big-calendar.css';
-import { Skeleton } from 'antd';
+import React, { Component } from "react";
+import Navbar from "../components/Navbar";
+import CustomerTable from "../components/CustomerTable";
+import { connect } from "react-redux";
+import * as actionCreators from "../store/actions";
+import "react-big-calendar/lib/css/react-big-calendar.css";
+import { Skeleton } from "antd";
 
 class Home extends Component {
   state = {
@@ -12,6 +12,7 @@ class Home extends Component {
   };
 
   componentDidMount() {
+    this.props.fetchCustomers();
     this.setState({ loading: false });
   }
 
@@ -19,7 +20,7 @@ class Home extends Component {
     switch (this.state.loading) {
       case false:
         return (
-          <div className="box-container">
+          <div className='box-container'>
             <CustomerTable />
           </div>
         );
@@ -33,7 +34,7 @@ class Home extends Component {
   }
   render() {
     return (
-      <div className="container">
+      <div className='container'>
         <Navbar />
         {this.renderContent()}
       </div>

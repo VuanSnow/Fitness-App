@@ -1,89 +1,59 @@
-import React, { Component } from 'react';
-import Navbar from '../components/Navbar';
-import { connect } from 'react-redux';
-import * as actionCreators from '../store/actions';
-import moment from 'moment';
-import BigCalendar from 'react-big-calendar';
+import React, { Component } from "react";
+import Navbar from "../components/Navbar";
+import moment from "moment";
+import axios from "axios";
+import BigCalendar from "react-big-calendar";
 
-class Calendar extends Component {
+export default class Calendar extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      event: [
-        {
-          start: new Date(),
-          end: new Date(moment().add(1, 'days')),
-          title: 'Some title'
-        }
-      ]
+      events: []
     };
   }
-  componentDidMount() {
-    let trainingArr = [];
-    const customers = this.props.customers;
-    if (customers.length > 0) {
-      customers.forEach(customer => {
-        customer.trainings.forEach(training => {
-          if (training.rel !== null) {
-            trainingArr.push({
-              start: moment(training.date),
-              end: moment(training.date),
-              title: `${customer.firstname} ${customer.lastname} - ${
-                training.activity
-              } - ${training.duration} min(s)`
-            });
-          }
-        });
-      });
-    }
-    this.setState({ event: trainingArr, loading: false }, () => {
-      console.log(trainingArr);
-    });
-  }
+  async componentDidMount() {
+    const trainings = await axios
+      .get(`http://customerrest.herokuapp.com/api/trainings`)
+      .then(res => res.data.content);
 
-  renderContent() {
-    const localizer = BigCalendar.momentLocalizer(moment);
-    switch (this.state.loading) {
-      case false:
-        return (
-          <div className="container">
-            <Navbar />
-            <div
-              id="calendar"
-              className="box-container"
-              style={{
-                backgroundColor: 'white',
-                padding: '2em',
-                borderRadius: '4px'
-              }}
-            >
-              <BigCalendar
-                localizer={localizer}
-                events={this.state.event}
-                startAccessor="start"
-                endAccessor="end"
-                allDay="true"
-              />
-            </div>
-          </div>
-        );
-      default:
-        return <p />;
-    }
+    let events = [];
+    trainings.forEach(training => {
+      const { date, activity, duration } = training;
+      events.push({
+        start: moment(date).toDate(),
+        end: moment(date)
+          .add(duration, "minutes")
+          .toDate(),
+        title: activity
+      });
+    });
+
+    this.setState({ events });
   }
 
   render() {
-    return this.renderContent();
+    const localizer = BigCalendar.momentLocalizer(moment);
+    return (
+      <div className='container'>
+        <Navbar />
+        <div
+          id='calendar'
+          className='box-container'
+          style={{
+            backgroundColor: "white",
+            padding: "2em",
+            borderRadius: "4px"
+          }}
+        >
+          <BigCalendar
+            localizer={localizer}
+            events={this.state.events}
+            startAccessor='start'
+            endAccessor='end'
+            allDay='true'
+          />
+        </div>
+      </div>
+    );
   }
 }
-
-const mapStateToProps = state => {
-  return {
-    customers: state.customers
-  };
-};
-
-export default connect(
-  mapStateToProps,
-  actionCreators
-)(Calendar);
