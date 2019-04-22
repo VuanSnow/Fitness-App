@@ -23,9 +23,7 @@ import {
   Empty
 } from "antd";
 import "antd/dist/antd.css";
-import Axios from "axios";
-
-const { Meta } = Card;
+import axios from "axios";
 
 const pStyle = {
   fontSize: 16,
@@ -77,6 +75,7 @@ class CustomerTable extends Component {
     this.trainingDrawer = this.trainingDrawer.bind(this);
   }
 
+  //Make customer, create customer, training, add training drawer visible
   showDrawer = drawerName => {
     let drawer = "";
     switch (drawerName) {
@@ -99,6 +98,7 @@ class CustomerTable extends Component {
     return this.setState({ [drawer]: true });
   };
 
+  //Hide customer, create customer, traininig and add training drawer
   closeDrawer = drawerName => {
     let drawer = "";
     switch (drawerName) {
@@ -121,13 +121,14 @@ class CustomerTable extends Component {
     return this.setState({ [drawer]: false });
   };
 
+  //Add training for customer
   addTraining = data => {
     const { activity, duration } = data;
 
     const url = "http://customerrest.herokuapp.com/api/trainings";
     const config = { headers: { "Content-Type": "application/json" } };
     if (activity.trim().length > 0 && duration > 0) {
-      Axios.post(url, data, config);
+      axios.post(url, data, config);
       setTimeout(() => {
         message.success("New training added!");
       }, 1000);
@@ -135,20 +136,23 @@ class CustomerTable extends Component {
     }
   };
 
+  //Delete training from customer
   deleteTraining = url => {
-    Axios.delete(url);
+    axios.delete(url);
     setTimeout(() => {
       message.loading("Delete in progress..", 0);
     }, 200);
     setTimeout(() => window.location.reload(), 1800);
   };
 
+  //Create new customer
   createCustomerFunc = customer => {
     this.setState({ createCustomerLoading: true });
     let check = true;
     const url = "http://customerrest.herokuapp.com/api/customers";
     const config = { headers: { "Content-Type": "application/json" } };
 
+    //Check if customer has any empty fields
     for (let key in customer) {
       if (customer[key].trim() !== "") {
         check = false;
@@ -160,7 +164,7 @@ class CustomerTable extends Component {
     if (check) {
       this.setState({ createCustomerLoading: false });
     } else if (!check) {
-      Axios.post(url, customer, config);
+      axios.post(url, customer, config);
 
       setTimeout(() => {
         message.success("New customer added!");
@@ -254,40 +258,47 @@ class CustomerTable extends Component {
               <Form.Item>
                 <Row>
                   <Col>
-                    <Input
-                      required
-                      suffix={
-                        <Icon
-                          type='contacts'
-                          style={{ color: "rgba(0,0,0,.25)" }}
-                        />
-                      }
-                      onChange={e => (newTraining.activity = e.target.value)}
-                      placeholder=' Activity...'
-                    />
+                    <Tooltip trigger={["focus"]} title='Jogging maybe?'>
+                      <Input
+                        required
+                        suffix={
+                          <Icon
+                            type='thunderbolt'
+                            style={{ color: "rgba(0,0,0,.25)" }}
+                          />
+                        }
+                        onChange={e => (newTraining.activity = e.target.value)}
+                        placeholder=' Activity...'
+                      />
+                    </Tooltip>
                   </Col>
                 </Row>
               </Form.Item>
               <Form.Item>
                 <Row>
                   <Col>
-                    <InputNumber
-                      required
-                      style={{ width: "100%" }}
-                      defaultValue={10}
-                      min={0}
-                      max={120}
-                      formatter={e => `${e}min`}
-                      parser={e => e.replace("min", "")}
-                      onChange={e => (newTraining.duration = e)}
-                      suffix={
-                        <Icon
-                          type='contacts'
-                          style={{ color: "rgba(0,0,0,.25)" }}
-                        />
-                      }
-                      placeholder=' Duration...'
-                    />
+                    <Tooltip
+                      trigger={["focus"]}
+                      title='Insert duration in minutes'
+                    >
+                      <InputNumber
+                        required
+                        style={{ width: "100%" }}
+                        defaultValue={10}
+                        min={0}
+                        max={120}
+                        formatter={e => `${e}min`}
+                        parser={e => e.replace("min", "")}
+                        onChange={e => (newTraining.duration = e)}
+                        suffix={
+                          <Icon
+                            type='contacts'
+                            style={{ color: "rgba(0,0,0,.25)" }}
+                          />
+                        }
+                        placeholder=' Duration...'
+                      />
+                    </Tooltip>
                   </Col>
                 </Row>
               </Form.Item>
@@ -540,7 +551,7 @@ class CustomerTable extends Component {
     message.success(`Successfully removed customer ${name}`, 2);
     this.props.removeCustomerFunc(id);
     const url = `http://customerrest.herokuapp.com/api/customers/${id}`;
-    Axios.delete(url);
+    axios.delete(url);
   };
 
   filterData = () => {
@@ -606,7 +617,7 @@ class CustomerTable extends Component {
             </Tooltip>
           ]}
         >
-          <Meta
+          <Card.Meta
             title={`${customer.firstname} ${customer.lastname}`}
             avatar={
               <Avatar src='https://cdn3.iconfinder.com/data/icons/avatars-9/145/Avatar_Panda-512.png' />
