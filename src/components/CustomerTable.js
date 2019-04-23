@@ -139,9 +139,8 @@ class CustomerTable extends Component {
   //Delete training from customer
   deleteTraining = url => {
     axios.delete(url);
-    setTimeout(() => {
-      message.loading("Delete in progress..", 0);
-    }, 200);
+    setTimeout(() => message.loading("Delete in progress..", 0.4), 200);
+    setTimeout(() => message.success("Training deleted!"), 600);
     setTimeout(() => window.location.reload(), 1800);
   };
 
@@ -174,6 +173,7 @@ class CustomerTable extends Component {
     }
   };
 
+  //Customer trainings drawer
   trainingDrawer = () => {
     const customer = this.state.currentCustomer;
     if (customer.trainings !== undefined) {
@@ -183,12 +183,15 @@ class CustomerTable extends Component {
           <p style={pStyle}>Date: {moment(e.date).format("DD/MM/YYYY")}</p>
           <p style={pStyle}>Activity: {e.activity}</p>
           <p style={pStyle}>Duration: {e.duration} min(s)</p>
-          <Button
-            type='danger'
-            onClick={() => this.deleteTraining(e.links[0].href)}
+          <Popconfirm
+            title='Are you sure you want to delete this customer?'
+            onConfirm={() => this.deleteTraining(e.links[0].href)}
+            onCancel={this.cancel}
+            okText='Yes'
+            cancelText='No'
           >
-            Delete training
-          </Button>
+            <Button type='danger'>Delete training</Button>
+          </Popconfirm>
         </Row>
       ));
 
@@ -321,6 +324,7 @@ class CustomerTable extends Component {
     }
   };
 
+  //Create customer drawer
   createCustomerDrawer = () => {
     let customer = {
       firstname: "",
@@ -493,6 +497,7 @@ class CustomerTable extends Component {
     );
   };
 
+  //Customer drawer
   customerDrawer = () => {
     const customer = this.state.currentCustomer;
     return (
@@ -542,11 +547,13 @@ class CustomerTable extends Component {
     );
   };
 
+  //Search customer by name => state.search
   search = e => {
     const search = e.target.value;
     this.setState({ search });
   };
 
+  //Delete customer
   deleteCustomer = (id, name) => {
     message.success(`Successfully removed customer ${name}`, 2);
     this.props.removeCustomerFunc(id);
@@ -554,6 +561,7 @@ class CustomerTable extends Component {
     axios.delete(url);
   };
 
+  //Filter customer list by customer name from state.search
   filterData = () => {
     const keyword = this.state.search.toUpperCase();
     const data = this.props.customers.filter(
@@ -565,10 +573,12 @@ class CustomerTable extends Component {
     return data;
   };
 
+  //Popconfirm cancel
   cancel = () => {
     console.log("cancel");
   };
 
+  //Customer list
   CustomerList = props => {
     const data = props.data;
     const listItems = data.map(customer => (
@@ -652,7 +662,7 @@ class CustomerTable extends Component {
       </Row>
     );
   };
-
+  //Render filtered list / Customer list
   renderContent() {
     const searchLength = this.state.search.trim().length > 0;
     switch (searchLength) {
