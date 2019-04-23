@@ -11,7 +11,6 @@
 body {
   background: url("../bg.jpg") no-repeat fixed center;
   background-size: cover;
-  font-family: "Fredoka One", cursive;
   user-select: none;
   -moz-user-select: none;
   -khtml-user-select: none;
