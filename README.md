@@ -7,7 +7,7 @@
   __Task Case:__
   Personal Trainer company needs front end to their customer database. Database contains info about customers and their 	trainings. They have REST API and documentation which contains all information needed for front end development.
 
-__Live demo @__ [Heroku](http://fitness-app-vuan.herokuapp.com/) 
+__Live demo @__ [Heroku](https://fitness-app-vuan.herokuapp.com/) 
   
 
 ## Getting started
