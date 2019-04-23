@@ -574,9 +574,7 @@ class CustomerTable extends Component {
   };
 
   //Popconfirm cancel
-  cancel = () => {
-    console.log("cancel");
-  };
+  cancel = () => {};
 
   //Customer list
   CustomerList = props => {
