@@ -125,7 +125,7 @@ class CustomerTable extends Component {
   addTraining = data => {
     const { activity, duration } = data;
 
-    const url = "http://customerrest.herokuapp.com/api/trainings";
+    const url = "https://customerrest.herokuapp.com/api/trainings";
     const config = { headers: { "Content-Type": "application/json" } };
     if (activity.trim().length > 0 && duration > 0) {
       axios.post(url, data, config);
@@ -148,7 +148,7 @@ class CustomerTable extends Component {
   createCustomerFunc = customer => {
     this.setState({ createCustomerLoading: true });
     let check = true;
-    const url = "http://customerrest.herokuapp.com/api/customers";
+    const url = "https://customerrest.herokuapp.com/api/customers";
     const config = { headers: { "Content-Type": "application/json" } };
 
     //Check if customer has any empty fields
@@ -557,7 +557,7 @@ class CustomerTable extends Component {
   deleteCustomer = (id, name) => {
     message.success(`Successfully removed customer ${name}`, 2);
     this.props.removeCustomerFunc(id);
-    const url = `http://customerrest.herokuapp.com/api/customers/${id}`;
+    const url = `https://customerrest.herokuapp.com/api/customers/${id}`;
     axios.delete(url);
   };
 

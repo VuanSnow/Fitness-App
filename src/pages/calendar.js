@@ -15,7 +15,7 @@ export default class Calendar extends Component {
   //Get all trainings from endpoint and add to state.events
   async componentDidMount() {
     const trainings = await axios
-      .get(`http://customerrest.herokuapp.com/api/trainings`)
+      .get(`https://customerrest.herokuapp.com/api/trainings`)
       .then(res => res.data.content);
 
     let events = [];
